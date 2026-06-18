@@ -25,17 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $zpl2_base = gerarZPL($partes['parte2'], 500, 400, 30, 'parte2');
     $zpl3_base = gerarZPL($partes['parte3'], 450, 900, 0, 'parte3');
 
-    // String única que vai juntar tudo na ordem certa
     $conteudo_final = "";
 
-    // O laço monta a sequência exata: Palete 1 (1,2,3) -> Palete 2 (1,2,3)...
     for ($i = 1; $i <= $quantidadePaletes; $i++) {
         $conteudo_final .= $zpl1_base . "\n";
         $conteudo_final .= $zpl2_base . "\n";
         $conteudo_final .= $zpl3_base . "\n";
     }
 
-    // Salva um único arquivo pronto para o lote inteiro
     salvarArquivo("imprimir_tudo.prn", $conteudo_final);
 
     $mensagem = "<div class='sucesso'>✓ Sequência para <strong>{$quantidadePaletes}</strong> palete(s) gerada! Agora execute o arquivo .bat.</div>";
@@ -46,13 +43,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Zebra Splitter V1</title>
+    <title>Zebra Splitter</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-    <h2>Zebra Splitter</h2>
+    <div class="logo-container">
+        <img src="assets/logo.png" alt="Logo CCN Distribuidora" class="logo">
+    </div>
     
     <?php if (!empty($mensagem)) echo $mensagem; ?>
 
