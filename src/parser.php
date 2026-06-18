@@ -1,5 +1,5 @@
 <?php
-
+//estrutura o zpl em blocos
 function normalizarZPL($zpl)
 {
     $zpl = preg_replace('/^[^\^]+/', '', $zpl);

@@ -1,5 +1,5 @@
 <?php
-
+//divide os blocos de acordo com as coordenadas
 function dividirEtiquetas($blocos)
 {
     $parte1 = [];

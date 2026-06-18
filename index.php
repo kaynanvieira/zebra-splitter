@@ -6,52 +6,64 @@ require_once "src/divisor.php";
 require_once "src/gerador.php";
 require_once "src/salvar.php";
 
-$arquivo = "entrada/r_armaz.prn";
+$mensagem = "";
 
-$zpl = lerZPL($arquivo);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $quantidadePaletes = isset($_POST['quantidade']) ? (int)$_POST['quantidade'] : 1;
+    
+    if ($quantidadePaletes < 1) {
+        $quantidadePaletes = 1;
+    }
 
-$linhas = normalizarZPL($zpl);
+    $arquivo = "entrada/r_armaz.prn";
+    $zpl = lerZPL($arquivo);
+    $linhas = normalizarZPL($zpl);
+    $blocos = agruparBlocos($linhas);
+    $partes = dividirEtiquetas($blocos);
 
-$blocos = agruparBlocos($linhas);
+    $zpl1_base = gerarZPL($partes['parte1'], 450, 0, 0, 'parte1');
+    $zpl2_base = gerarZPL($partes['parte2'], 500, 400, 30, 'parte2');
+    $zpl3_base = gerarZPL($partes['parte3'], 450, 900, 0, 'parte3');
 
-$partes = dividirEtiquetas($blocos);
+    // String única que vai juntar tudo na ordem certa
+    $conteudo_final = "";
 
+    // O laço monta a sequência exata: Palete 1 (1,2,3) -> Palete 2 (1,2,3)...
+    for ($i = 1; $i <= $quantidadePaletes; $i++) {
+        $conteudo_final .= $zpl1_base . "\n";
+        $conteudo_final .= $zpl2_base . "\n";
+        $conteudo_final .= $zpl3_base . "\n";
+    }
 
-// gera os novos zpl
+    // Salva um único arquivo pronto para o lote inteiro
+    salvarArquivo("imprimir_tudo.prn", $conteudo_final);
 
-$zpl1 = gerarZPL(
-    $partes['parte1'],
-    450,
-    0,
-    0,
-    'parte1'
-);
-
-$zpl2 = gerarZPL(
-    $partes['parte2'],
-    500,
-    400,
-    30,
-    'parte2'
-);
-
-$zpl3 = gerarZPL(
-    $partes['parte3'],
-    450,
-    900,
-    0,
-    'parte3'
-);
-
-
-// salva
-
-salvarArquivo("parte1.prn", $zpl1);
-
-salvarArquivo("parte2.prn", $zpl2);
-
-salvarArquivo("parte3.prn", $zpl3);
-
-
-echo "<h1>Arquivos gerados com sucesso!</h1>";
+    $mensagem = "<div class='sucesso'>✓ Sequência para <strong>{$quantidadePaletes}</strong> palete(s) gerada! Agora execute o arquivo .bat.</div>";
+}
 ?>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Zebra Splitter V1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Zebra Splitter</h2>
+    
+    <?php if (!empty($mensagem)) echo $mensagem; ?>
+
+    <form action="" method="POST">
+        <div class="form-group">
+            <label for="quantidade">Quantidade de Paletes:</label>
+            <input type="number" id="quantidade" name="quantidade" min="1" value="1" required autofocus>
+        </div>
+        <button type="submit">Gerar Lote de Etiquetas</button>
+    </form>
+</div>
+
+</body>
+</html>

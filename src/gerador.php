@@ -1,5 +1,5 @@
 <?php
-
+//recebe os blocos, altura e recria o novos zpls, recalculando algumas posições e tamanhos
 function gerarZPL($blocos, $altura = 400, $offsetY = 0, $offsetX = 0, $tipo = '')
 {
     $zpl = "";
