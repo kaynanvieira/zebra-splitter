@@ -1,10 +1,10 @@
-# Zebra Splitter V1 🦓🖨️
+# Zebra Splitter V1
 
 O **Zebra Splitter** é uma solução emergencial em PHP desenvolvida para interceptar e tratar arquivos de impressão ZPL (`.prn`). Ele automatiza a divisão de etiquetas logísticas de grande porte (originalmente projetadas para a **Zebra ZT230**) em três partes menores correlacionadas, permitindo a impressão contínua e sequencial na **Zebra GC420t** sem travar a operação de expedição.
 
 ---
 
-## 🚀 O Problema e a Solução
+## O Problema e a Solução
 
 * **Cenário:** A impressora industrial principal (Zebra ZT230) parou para manutenção. O ERP/WMS da empresa gera apenas arquivos `.prn` em lote com coordenadas fixas para etiquetas grandes.
 * **Impacto:** Interrupção no fluxo de colagem de paletes devido à incompatibilidade de hardware da impressora reserva (GC420t).
@@ -12,7 +12,7 @@ O **Zebra Splitter** é uma solução emergencial em PHP desenvolvida para inter
 
 ---
 
-## 🛠️ Funcionalidades
+## Funcionalidades
 
 - **Parser ZPL Nativo:** Quebra a estrutura bruta do arquivo `.prn` isolando blocos de comando por tag de fechamento (`^FS`).
 - **Recálculo de Coordenadas:** Aplica offset vertical dinâmico baseado na área de corte da etiqueta menor.
@@ -21,7 +21,7 @@ O **Zebra Splitter** é uma solução emergencial em PHP desenvolvida para inter
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```text
 ZEBRA_SPLITTER/
